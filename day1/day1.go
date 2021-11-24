@@ -8,10 +8,10 @@ import (
 	"strconv"
 )
 
-func part1(numbers []int) int {
+func part1(numbers []int, target int) int {
 	for  i := 0; i < len(numbers)-1; i++{
-		for j := i; j < len(numbers)-1; j++{
-			if numbers[i]+numbers[j] == 2020{
+		for j := i+1; j < len(numbers)-1; j++{
+			if numbers[i]+numbers[j] == target{
 				return (numbers[i]*numbers[j])
 			}
 		}
@@ -19,11 +19,11 @@ func part1(numbers []int) int {
 	return -1
 }
 
-func part2(numbers []int) int {
+func part2(numbers []int, target int) int {
 	for  i := 0; i < len(numbers)-1; i++{
-		for j := i; j < len(numbers)-1; j++{
-			for k := j; k < len(numbers)-1; k++{
-				if numbers[i]+numbers[j] == 2020{
+		for j := i+1; j < len(numbers)-1; j++{
+			for k := j+1; k < len(numbers)-1; k++{
+				if numbers[i]+numbers[j] == target{
 					return (numbers[i]*numbers[j]*numbers[k])
 				}				
 			}
@@ -35,6 +35,7 @@ func part2(numbers []int) int {
 func main() {
 
 	var result []int
+	var target int = 2020
 	ints, err := os.Open("input.txt")
 	
 	if err != nil{
@@ -51,6 +52,6 @@ func main() {
 		}
 		result = append(result, x)
 	}
-	fmt.Println(part1(result))
-	fmt.Println(part2(result))
+	fmt.Println(part1(result,target))
+	fmt.Println(part2(result,target))
 }
