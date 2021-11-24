@@ -29,10 +29,13 @@ func main() {
 	}
 	for  i := 0; i < len(result)-1; i++{
 		for j := i; j < len(result)-1; j++{
-			if result[i]+result[j] == 2020{
-				fmt.Println(result[i])
-				fmt.Println(result[j])
-				fmt.Println(result[i]*result[j])
+			for k := j; k < len(result)-1; k++{
+				if result[i]+result[j]+result[k] == 2020{
+					fmt.Println(result[i])
+					fmt.Println(result[j])
+					fmt.Println(result[k])
+					fmt.Println(result[i]*result[j]*result[k])
+				}	
 			}
 		}
 	}
