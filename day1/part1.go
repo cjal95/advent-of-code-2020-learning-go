@@ -3,11 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	//	"fmt"
 	"log"
 	"os"
 	"strconv"
-	//	"strings"
 )
 
 func main() {
