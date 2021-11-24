@@ -8,7 +8,9 @@ import (
 	"strconv"
 )
 
-func part1(numbers []int, target int) int {
+var target int = 2020
+
+func part1(numbers []int) int {
 	for  i := 0; i < len(numbers)-1; i++{
 		for j := i+1; j < len(numbers)-1; j++{
 			if numbers[i]+numbers[j] == target{
@@ -19,7 +21,7 @@ func part1(numbers []int, target int) int {
 	return -1
 }
 
-func part2(numbers []int, target int) int {
+func part2(numbers []int) int {
 	for  i := 0; i < len(numbers)-1; i++{
 		for j := i+1; j < len(numbers)-1; j++{
 			for k := j+1; k < len(numbers)-1; k++{
@@ -35,7 +37,6 @@ func part2(numbers []int, target int) int {
 func main() {
 
 	var result []int
-	var target int = 2020
 	ints, err := os.Open("input.txt")
 	
 	if err != nil{
@@ -52,6 +53,6 @@ func main() {
 		}
 		result = append(result, x)
 	}
-	fmt.Println(part1(result,target))
-	fmt.Println(part2(result,target))
+	fmt.Println(part1(result))
+	fmt.Println(part2(result))
 }
