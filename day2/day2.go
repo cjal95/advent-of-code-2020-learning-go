@@ -3,46 +3,92 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
-	"regexp"
 )
 
-type password struct {
-	min, max         int
-	letter, password string
+// Policy -
+type Policy struct {
+	Min      int
+	Max      int
+	Letter   string
+	Password string
+}
+
+func checkPolicyPartOne(policies []Policy) int {
+	result := 0
+	for _, policy := range policies {
+		count := len(strings.Split(policy.Password, policy.Letter)) - 1
+		if count >= policy.Min && count <= policy.Max {
+			result++
+		}
+	}
+	return result
+}
+
+func checkPolicyPartTwo(policies []Policy) int {
+	result := 0
+	for _, policy := range policies {
+		if policy.Min <= 0 || policy.Max > len(policy.Password) {
+			continue
+		}
+		minLetter := policy.Password[policy.Min-1 : policy.Min]
+		maxLetter := policy.Password[policy.Max-1 : policy.Max]
+		count := 0
+		if minLetter == policy.Letter {
+			count++
+		}
+		if maxLetter == policy.Letter {
+			count++
+		}
+		if count == 1 {
+			result++
+		}
+	}
+	return result
+}
+
+func getInt(val string) int {
+	result, _ := strconv.Atoi(val)
+	return result
+}
+
+func getInput() []string {
+	file, _ := os.Open("input.txt")
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	var passwords []string
+	for scanner.Scan() {
+		passwords = append(passwords, scanner.Text())
+	}
+	return passwords
+}
+
+func getPolicies(rows []string) []Policy {
+	var policies []Policy
+	for _, row := range rows {
+		minEnd := strings.Index(row, "-")
+		min := getInt(row[:minEnd])
+		row = row[minEnd+1:]
+		maxEnd := strings.Index(row, " ")
+		max := getInt(row[:maxEnd])
+		row = row[maxEnd+1:]
+		letter := row[:1]
+		password := row[3:]
+		policies = append(policies, Policy{
+			Letter:   letter,
+			Password: password,
+			Min:      min,
+			Max:      max,
+		})
+	}
+	return policies
 }
 
 func main() {
-
-	file, err := os.Open("input.txt")
-	if err != nil{
-		log.Fatal(err) //If error in opening file
-	}
-	defer file.Close()
-	passwords := []*password{}
-
-	inputRegex := regexp.MustCompile(`^(\d+)-(\d+) (\w): (\w+)$`)
-	
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		text := scanner.Text()
-		min, _ := strconv.Atoi(inputRegex.ReplaceAllString(text, "$1"))
-		max, _ := strconv.Atoi(inputRegex.ReplaceAllString(text, "$2"))
-		passwords = append(passwords, &password{
-			min:      min,
-			max:      max,
-			letter:   inputRegex.ReplaceAllString(text, "$3"),
-			password: inputRegex.ReplaceAllString(text, "$4"),
-		})
-	}
-	correct := 0
-	for _, pw := range passwords {
-		if count := strings.Count(pw.password, pw.letter); count >= pw.min && count <= pw.max {
-		correct++
-		}
-	}
-	fmt.Println(correct)
+	rows := getInput()
+	polices := getPolicies(rows)
+	fmt.Println("PartOne", checkPolicyPartOne(polices))
+	fmt.Println("PartTwo", checkPolicyPartTwo(polices))
 }
